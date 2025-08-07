@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YouTube Content Hub MVP (Modern)</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="container">
+        <h1>YouTube Content Hub (MVP)</h1>
+
+        <div id="auth-container">
+            <p>กรุณาลงชื่อเข้าใช้ด้วยบัญชี Google เพื่ออัปโหลดวิดีโอ</p>
+            <button id="login-button">ลงชื่อเข้าใช้ (Authorize)</button>
+        </div>
+
+        <div id="upload-form-container" style="display:none;">
+            <h2>อัปโหลดวิดีโอใหม่</h2>
+            <form id="upload-form">
+                <label for="title">ชื่อคลิป:</label>
+                <input type="text" id="title" required>
+
+                <label for="description">คำอธิบาย:</label>
+                <textarea id="description" rows="5"></textarea>
+
+                <label for="tags">Tags (คั่นด้วยเครื่องหมาย ,):</label>
+                <input type="text" id="tags">
+
+                <label for="video-file">เลือกไฟล์วิดีโอ:</label>
+                <input type="file" id="video-file" accept="video/*" required>
+
+                <button type="submit" id="upload-button">อัปโหลดไปยัง YouTube</button>
+            </form>
+            <div id="upload-status"></div>
+        </div>
+    </div>
+
+    <script async defer src="https://apis.google.com/js/api.js"></script>
+    <script async defer src="https://accounts.google.com/gsi/client"></script>
+    
+    <script src="upload.js"></script>
+
+</body>
+</html>

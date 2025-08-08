@@ -14,6 +14,10 @@ const logoutButton = document.getElementById('logout-button');
 const uploadFormContainer = document.getElementById('upload-form-container');
 const uploadForm = document.getElementById('upload-form');
 const uploadStatus = document.getElementById('upload-status');
+const menuToggle = document.getElementById('menu-toggle');
+const sideNav = document.getElementById('side-nav');
+const authStatus = document.getElementById('auth-status');
+
 
 let tokenClient;
 let gapiInited = false;
@@ -70,20 +74,34 @@ function restoreSession() {
 function showLoginForm() {
     authContainer.style.display = 'block';
     uploadFormContainer.style.display = 'none';
+
+    // Move login button to header
+    authStatus.innerHTML = ''; // Clear previous state
+    authStatus.appendChild(loginButton);
+    loginButton.style.display = 'inline-block';
     logoutButton.style.display = 'none';
 }
 
 function showUploadForm() {
     authContainer.style.display = 'none';
     uploadFormContainer.style.display = 'block';
+
+    // Move logout button to header
+    authStatus.innerHTML = ''; // Clear previous state
+    authStatus.appendChild(logoutButton);
     logoutButton.style.display = 'inline-block';
+    loginButton.style.display = 'none';
 }
+
 
 // --- Event Handlers ---
 loginButton.disabled = true;
 loginButton.onclick = handleAuthClick;
 logoutButton.onclick = handleLogout;
 uploadForm.onsubmit = handleUpload;
+menuToggle.onclick = () => {
+    sideNav.classList.toggle('open');
+};
 
 function handleLogout() {
     const tokenDataString = localStorage.getItem('youtube_token');

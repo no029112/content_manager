@@ -8,42 +8,58 @@
 </head>
 <body>
 
-    <div class="container">
-        <h1>YouTube Content Hub (MVP)</h1>
-
-        <div id="auth-container">
-            <p>กรุณาลงชื่อเข้าใช้ด้วยบัญชี Google เพื่ออัปโหลดวิดีโอ</p>
-            <button id="login-button">ลงชื่อเข้าใช้ (Authorize)</button>
+    <header>
+        <button id="menu-toggle">&#9776;</button>
+        <h1>YouTube Content Hub</h1>
+        <div id="auth-status">
+            <!-- Login/Logout button will be dynamically added here -->
         </div>
+    </header>
 
-        <div id="upload-form-container" style="display:none;">
-            <h2>อัปโหลดวิดีโอใหม่</h2>
-            <form id="upload-form">
-                <label for="title">ชื่อคลิป:</label>
-                <input type="text" id="title" required>
+    <nav id="side-nav">
+        <a href="#" id="nav-upload-link">อัปโหลดวิดีโอ</a>
+        <!-- Add other links here in the future -->
+    </nav>
 
-                <label for="description">คำอธิบาย:</label>
-                <textarea id="description" rows="5"></textarea>
+    <main class="container">
+        <div id="main-content">
+            <!-- Content will be shown here based on auth state -->
+             <div id="auth-container">
+                <p>กรุณาลงชื่อเข้าใช้ด้วยบัญชี Google เพื่อใช้งาน</p>
+                <!-- The login button is now dynamically added to the header -->
+            </div>
 
-                <label for="tags">Tags (คั่นด้วยเครื่องหมาย ,):</label>
-                <input type="text" id="tags">
+            <div id="upload-form-container" style="display:none;">
+                <h2>อัปโหลดวิดีโอใหม่</h2>
+                <form id="upload-form">
+                    <label for="title">ชื่อคลิป:</label>
+                    <input type="text" id="title" required>
 
-                <label for="program-name">ชื่อรายการ:</label>
-                <select id="program-name" required>
-                    <option value="รู้ดีกว่า">รู้ดีกว่า</option>
-                    <option value="health ดีกว่า">health ดีกว่า</option>
-                    <option value="Shorts">Shorts</option>
-                </select>
-            </br>
-                <label for="video-file">เลือกไฟล์วิดีโอ:</label>
-                <input type="file" id="video-file" accept="video/*" required>
+                    <label for="description">คำอธิบาย:</label>
+                    <textarea id="description" rows="5"></textarea>
 
-                <button type="submit" id="upload-button">อัปโหลดไปยัง YouTube</button>
-                <button type="button" id="logout-button" style="display:none;">ออกจากระบบ (Logout)</button>
-            </form>
-            <div id="upload-status"></div>
+                    <label for="tags">Tags (คั่นด้วยเครื่องหมาย ,):</label>
+                    <input type="text" id="tags">
+
+                    <label for="program-name">ชื่อรายการ:</label>
+                    <select id="program-name" required>
+                        <option value="รู้ดีกว่า">รู้ดีกว่า</option>
+                        <option value="health ดีกว่า">health ดีกว่า</option>
+                        <option value="Shorts">Shorts</option>
+                    </select>
+                    <br>
+                    <label for="video-file">เลือกไฟล์วิดีโอ:</label>
+                    <input type="file" id="video-file" accept="video/*" required>
+
+                    <button type="submit" id="upload-button">อัปโหลดไปยัง YouTube</button>
+                </form>
+                <div id="upload-status"></div>
+            </div>
         </div>
-    </div>
+    </main>
+
+    <!-- Logout button will be managed by JS in the header -->
+    <button type="button" id="logout-button" style="display:none;">ออกจากระบบ (Logout)</button>
 
     <script async defer src="https://apis.google.com/js/api.js"></script>
     <script async defer src="https://accounts.google.com/gsi/client"></script>

@@ -8,7 +8,9 @@ const DISCOVERY_DOCS = [
 const SCOPES = 'https://www.googleapis.com/auth/youtube.upload https://www.googleapis.com/auth/spreadsheets';
 
 // --- Element References ---
+const authContainer = document.getElementById('auth-container');
 const loginButton = document.getElementById('login-button');
+const logoutButton = document.getElementById('logout-button');
 const uploadFormContainer = document.getElementById('upload-form-container');
 const uploadForm = document.getElementById('upload-form');
 const uploadStatus = document.getElementById('upload-status');
@@ -39,35 +41,82 @@ async function initializeGapiClient() {
     checkAuthButton();
 }
 
-// เช็คว่าโหลดครบทั้ง 2 library หรือยัง แล้วค่อยเปิดปุ่ม
+// --- Session Management & Auth Flow ---
+
 function checkAuthButton() {
     if (gapiInited && gisInited) {
         loginButton.disabled = false;
+        restoreSession();
     }
 }
 
-// --- จัดการการทำงานของปุ่ม ---
+function restoreSession() {
+    const tokenDataString = localStorage.getItem('youtube_token');
+    if (tokenDataString) {
+        const tokenData = JSON.parse(tokenDataString);
+        const tokenAgeDays = (Date.now() - tokenData.timestamp) / (1000 * 60 * 60 * 24);
+
+        if (tokenAgeDays < 10) {
+            gapi.client.setToken(tokenData.token);
+            showUploadForm();
+        } else {
+            // Token is expired, clear it
+            localStorage.removeItem('youtube_token');
+        }
+    }
+}
+
+// --- UI Update Functions ---
+function showLoginForm() {
+    authContainer.style.display = 'block';
+    uploadFormContainer.style.display = 'none';
+    logoutButton.style.display = 'none';
+}
+
+function showUploadForm() {
+    authContainer.style.display = 'none';
+    uploadFormContainer.style.display = 'block';
+    logoutButton.style.display = 'inline-block';
+}
+
+// --- Event Handlers ---
 loginButton.disabled = true;
 loginButton.onclick = handleAuthClick;
+logoutButton.onclick = handleLogout;
 uploadForm.onsubmit = handleUpload;
 
+function handleLogout() {
+    const tokenDataString = localStorage.getItem('youtube_token');
+    if (tokenDataString) {
+        const tokenData = JSON.parse(tokenDataString);
+        google.accounts.oauth2.revoke(tokenData.token.access_token, () => {
+            console.log('Token revoked.');
+        });
+        localStorage.removeItem('youtube_token');
+    }
+    gapi.client.setToken(null);
+    showLoginForm();
+}
+
 function handleAuthClick() {
-    // เมื่อกดปุ่ม ให้ GIS ขอ Token
     tokenClient.callback = async (resp) => {
         if (resp.error !== undefined) {
             throw (resp);
         }
-        // ถ้าสำเร็จ ให้แสดงฟอร์ม
-        uploadFormContainer.style.display = 'block';
-        loginButton.style.display = 'none';
+        // Store the token and timestamp in localStorage
+        const token = gapi.client.getToken();
+        const tokenData = {
+            token: token,
+            timestamp: Date.now()
+        };
+        localStorage.setItem('youtube_token', JSON.stringify(tokenData));
+
+        // UI changes
+        showUploadForm();
     };
 
     if (gapi.client.getToken() === null) {
-        // ถ้ายังไม่มี token, ขอ token ใหม่
-        tokenClient.requestAccessToken({prompt: 'consent'});
-    } else {
-        // ถ้ามี token อยู่แล้ว แต่เผื่อหมดอายุ ให้ขอใหม่แบบเงียบๆ
-        //tokenClient.requestAccessToken({prompt: ''});
+        tokenClient.requestAccessToken({ prompt: 'consent' });
     }
 }
 

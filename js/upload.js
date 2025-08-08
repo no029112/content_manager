@@ -35,8 +35,7 @@ function handleUploadLinkClick(event) {
     showUploadForm();
 }
 
-// --- การอัปโหลด (โค้ดส่วนนี้เหมือนเดิมเกือบทั้งหมด) ---
-function handleUpload(event) {
+
 
 // --- การอัปโหลด (โค้ดส่วนนี้เหมือนเดิมเกือบทั้งหมด) ---
 function handleUpload(event) {

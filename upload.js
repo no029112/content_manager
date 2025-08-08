@@ -67,7 +67,7 @@ function handleAuthClick() {
         tokenClient.requestAccessToken({prompt: 'consent'});
     } else {
         // ถ้ามี token อยู่แล้ว แต่เผื่อหมดอายุ ให้ขอใหม่แบบเงียบๆ
-        tokenClient.requestAccessToken({prompt: ''});
+        //tokenClient.requestAccessToken({prompt: ''});
     }
 }
 

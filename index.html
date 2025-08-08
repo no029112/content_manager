@@ -28,21 +28,22 @@
     <div id="menu-placeholder"></div>
 
 
-    <main class="container mt-4">
-        <div id="main-content">
+    <main class="container mt-4" style="    justify-items: center;    width: fit-content;">
+        <div id="main-content" style="    width: fit-content;">
             <!-- Content will be shown here based on auth state -->
              <div id="auth-container">
                 <p>กรุณาลงชื่อเข้าใช้ด้วยบัญชี Google เพื่อใช้งาน</p>
                 <!-- The login button is now dynamically added to the header -->
             </div>
 
-            <div id="upload-form-container" style="display:none;"></div>
+            <div id="upload-form-container" style="display:none; width: 40rem;"></div>
+            <div id="content-container" style="display:none;"></div>
         </div>
     </main>
     <footer>
         <div class="container text-center py-3 d-flex" style="    bottom: 0; position: absolute;left: 0;right: 0;">
-            <p class="mb-0">© 2024 YouTube Content Hub. All rights reserved.</p>
-            <p class="mb-0">Developed by Chirans</p>
+            <!-- <p class="mb-0">© 2024 YouTube Content Hub. All rights reserved.</p>
+            <p class="mb-0">Developed by Chirans</p> -->
             <!-- Theme Toggle Switch -->
             <div class="form-check form-switch ms-auto me-3">
                 <input class="form-check-input" type="checkbox" role="switch" id="theme-toggle">
@@ -53,8 +54,8 @@
     </footer>
 
     <!-- Login/Logout buttons will be managed by JS in the header -->
-    <button type="button" id="login-button" class="btn btn-danger" style="display:none;">ลงชื่อเข้าใช้ (Authorize)</button>
-    <button type="button" id="logout-button" class="btn btn-secondary" style="display:none;">ออกจากระบบ (Logout)</button>
+    <button type="button" id="login-button" class="btn btn-danger" style="display:none;"> Authorize</button>
+    <button type="button" id="logout-button" class="btn btn-secondary" style="display:none;"> Logout</button>
 
     <script async defer src="https://apis.google.com/js/api.js" ></script>
     <script async defer src="https://accounts.google.com/gsi/client" onload="handleClientLoad()"></script>
@@ -64,6 +65,7 @@
     
     <script src="js/authen.js"></script>
     <script src="js/upload.js"></script>
+    <script src="js/content.js"></script>
     <script src="js/theme.js"></script>
     <script src="js/main.js"></script>
 

@@ -24,6 +24,7 @@ header {
 header h1 {
     margin: 0;
     font-size: 1.5em;
+    text-align: center;
 }
 
 #menu-toggle {
@@ -33,6 +34,7 @@ header h1 {
     font-size: 24px;
     cursor: pointer;
     padding: 0 15px 0 0;
+    width: 20px;
 }
 
 #auth-status button {
@@ -50,7 +52,7 @@ header h1 {
 
 #side-nav {
     position: fixed;
-    top: 0;
+    top: 10px;
     left: -250px; /* Hidden by default */
     width: 250px;
     height: 100%;

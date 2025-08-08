@@ -79,8 +79,21 @@ function showLoginForm() {
     logoutButton.style.display = 'none';
 }
 
-function showUploadForm() {
+async function showUploadForm() {
     authContainer.style.display = 'none';
+
+    // Load form content if it's not already loaded
+    if (uploadFormContainer.innerHTML.trim() === '') {
+        try {
+            const response = await fetch('upload.html');
+            if (!response.ok) throw new Error('Network response was not ok.');
+            uploadFormContainer.innerHTML = await response.text();
+        } catch (error) {
+            console.error('Failed to fetch upload.html:', error);
+            uploadFormContainer.innerHTML = '<p class="text-danger">Could not load upload form.</p>';
+        }
+    }
+
     uploadFormContainer.style.display = 'block';
 
     // Move logout button to header

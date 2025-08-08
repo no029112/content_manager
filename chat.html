@@ -1,0 +1,44 @@
+<!-- Main container for the Chat with AI feature -->
+<div id="chat-ai-container" class="container mt-4">
+    <h2 class="mb-3">แชทกับ AI</h2>
+    <p class="text-muted">AI จะใช้ข้อมูลวิดีโอทั้งหมดในช่องของคุณเพื่อช่วยตอบคำถาม</p>
+
+    <!-- Gemini API Key Input -->
+    <div class="mb-4 card">
+        <div class="card-body">
+            <h5 class="card-title">ตั้งค่า Gemini API Key</h5>
+            <p class="card-text">โปรดใส่ Gemini API Key ของคุณที่นี่ Key จะถูกเก็บไว้ในเบราว์เซอร์ของคุณเท่านั้น</p>
+            <div class="input-group">
+                <input type="password" class="form-control" id="gemini-api-key-input" placeholder="Enter your Gemini API Key">
+                <button class="btn btn-primary" type="button" id="save-gemini-key-btn">บันทึก</button>
+            </div>
+             <div id="api-key-status" class="form-text mt-2"></div>
+        </div>
+    </div>
+
+
+    <!-- Chat Box -->
+    <div class="card">
+        <div class="card-header bg-light">
+            Chat
+        </div>
+        <div class="card-body chat-box" id="chat-box">
+            <!-- Chat messages will be appended here -->
+            <div class="chat-message ai">
+                <div class="message-bubble">สวัสดี! ฉันคือ AI ผู้ช่วยของคุณ ฉันพร้อมที่จะตอบคำถามเกี่ยวกับช่อง YouTube ของคุณแล้ว โปรดใส่ Gemini API Key ของคุณด้านบนเพื่อเริ่มต้น</div>
+            </div>
+        </div>
+        <div class="card-footer bg-light">
+            <div id="chat-loading" style="display: none;" class="mb-2">
+                <div class="spinner-border spinner-border-sm" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+                <span class="ms-2">AI กำลังคิด...</span>
+            </div>
+            <div class="input-group">
+                <input type="text" class="form-control" id="chat-input" placeholder="พิมพ์ข้อความของคุณที่นี่..." disabled>
+                <button class="btn btn-success" id="chat-send-btn" disabled>ส่ง</button>
+            </div>
+        </div>
+    </div>
+</div>

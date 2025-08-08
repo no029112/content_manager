@@ -14,8 +14,6 @@ const logoutButton = document.getElementById('logout-button');
 const uploadFormContainer = document.getElementById('upload-form-container');
 const uploadForm = document.getElementById('upload-form');
 const uploadStatus = document.getElementById('upload-status');
-const menuToggle = document.getElementById('menu-toggle');
-const sideNav = document.getElementById('side-nav');
 const authStatus = document.getElementById('auth-status');
 
 
@@ -99,9 +97,6 @@ loginButton.disabled = true;
 loginButton.onclick = handleAuthClick;
 logoutButton.onclick = handleLogout;
 uploadForm.onsubmit = handleUpload;
-menuToggle.onclick = () => {
-    sideNav.classList.toggle('open');
-};
 
 function handleLogout() {
     const tokenDataString = localStorage.getItem('youtube_token');

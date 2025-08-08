@@ -105,12 +105,13 @@
     <button type="button" id="login-button" class="btn btn-danger" style="display:none;">ลงชื่อเข้าใช้ (Authorize)</button>
     <button type="button" id="logout-button" class="btn btn-secondary" style="display:none;">ออกจากระบบ (Logout)</button>
 
-    <script async defer src="https://apis.google.com/js/api.js"></script>
+    <script async defer src="https://apis.google.com/js/api.js" onload="handleClientLoad()"></script>
     <script async defer src="https://accounts.google.com/gsi/client"></script>
 
     <!-- Bootstrap JS Bundle with Popper -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     
+    <script src="authen.js"></script>
     <script src="upload.js"></script>
     <script src="theme.js"></script>
 

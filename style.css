@@ -1,121 +1,116 @@
+/*
+ *  STYLE: Tech-Dark Theme for YouTube Content Hub
+ */
+
+/* --- Base & Variables --- */
+:root {
+    --bs-body-bg: #1a1a1a; /* Darker background */
+    --bs-body-color: #e8e6e3; /* Off-white for text */
+    --bs-primary: #0d6efd; /* Bootstrap blue for accents */
+    --bs-secondary: #6c757d;
+    --bs-dark: #212529;
+    --bs-light: #f8f9fa;
+    --bs-border-color: rgba(255, 255, 255, 0.15); /* Lighter border for contrast */
+    --bs-border-color-translucent: rgba(255, 255, 255, 0.15);
+}
+
 body {
-    font-family: sans-serif;
-    background-color: #f4f4f4;
-    color: #333;
-    margin: 0;
-    padding-top: 60px; /* Space for the fixed header */
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-header {
-    background-color: #007bff;
-    color: white;
-    padding: 10px 20px;
-    position: fixed;
-    top: 0;
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-    z-index: 1000;
-    box-sizing: border-box;
+/* --- Navbar & Offcanvas --- */
+.navbar {
+    background-color: #212529 !important; /* Force a specific dark shade */
+    border-bottom: 1px solid var(--bs-primary) !important;
 }
 
-header h1 {
-    margin: 0;
-    font-size: 1.5em;
+.offcanvas {
+    background-color: #212529;
+}
+.offcanvas .nav-link {
+    color: var(--bs-light);
+    font-size: 1.1rem;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+}
+.offcanvas .nav-link:hover {
+    color: var(--bs-primary);
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+
+/* --- Main Content & Forms --- */
+main.container {
+    background-color: #2c2c2c;
+    padding: 2rem;
+    border-radius: 0.5rem;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+    margin-top: 2rem !important;
+}
+
+h2 {
+    color: var(--bs-primary);
+    border-bottom: 2px solid var(--bs-primary);
+    padding-bottom: 0.5rem;
+    margin-bottom: 1.5rem !important;
+}
+
+/* Custom styles for form controls to match the dark theme */
+.form-control, .form-select {
+    background-color: #3a3a3a;
+    color: var(--bs-body-color);
+    border-color: var(--bs-border-color);
+}
+.form-control:focus, .form-select:focus {
+    background-color: #4a4a4a;
+    color: var(--bs-body-color);
+    border-color: var(--bs-primary);
+    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+}
+.form-control::placeholder {
+    color: #888;
+}
+
+/* Ensure file input text is visible */
+.form-control[type="file"] {
+    color: var(--bs-secondary);
+}
+.form-control[type="file"]:hover {
+    color: var(--bs-light);
+}
+
+
+/* --- Buttons --- */
+.btn-primary {
+    background-color: var(--bs-primary);
+    border-color: var(--bs-primary);
+    font-weight: bold;
+    transition: background-color 0.2s ease-in-out, transform 0.1s ease-in-out;
+}
+.btn-primary:hover {
+    background-color: #0b5ed7; /* Slightly darker blue */
+    transform: translateY(-2px);
+}
+.btn-danger {
+    font-weight: bold;
+}
+
+/* --- Status Messages --- */
+#upload-status {
+    padding: 1rem;
+    border-radius: 0.25rem;
+    margin-top: 1rem;
+    font-weight: 500;
     text-align: center;
 }
 
-#menu-toggle {
-    background: none;
-    border: none;
-    color: white;
-    font-size: 24px;
-    cursor: pointer;
-    padding: 0 15px 0 0;
-    width: 20px;
-}
-
-#auth-status button {
-    background-color: #db4437;
-    padding: 8px 12px;
-    font-size: 14px;
-}
-#auth-status button:hover {
-    background-color: #c23321;
-}
-#auth-status span {
-    margin-right: 10px;
-}
-
-
-#side-nav {
-    position: fixed;
-    top: 10px;
-    left: -250px; /* Hidden by default */
-    width: 250px;
-    height: 100%;
-    background-color: #333;
-    padding-top: 60px;
-    transition: left 0.3s ease;
-    z-index: 999;
-}
-
-#side-nav.open {
-    left: 0;
-}
-
-#side-nav a {
-    display: block;
-    color: white;
-    padding: 15px 20px;
-    text-decoration: none;
-    font-size: 18px;
-}
-
-#side-nav a:hover {
-    background-color: #555;
-}
-
-main.container {
-    padding: 20px;
-    background-color: #fff;
-    max-width: 800px;
-    margin: 20px auto;
-    border-radius: 8px;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-}
-
-#main-content {
-    width: 100%;
-}
-
-input, textarea, button, select {
-    width: 100%;
-    padding: 10px;
-    margin-top: 5px;
-    margin-bottom: 15px;
-    border-radius: 4px;
-    border: 1px solid #ddd;
-    box-sizing: border-box; /* สำคัญมาก */
-}
-button {
-    background-color: #007bff;
-    color: white;
-    border: none;
-    cursor: pointer;
-    font-size: 16px;
-}
-button:hover {
-    background-color: #0056b3;
-}
-#login-button {
-    background-color: #db4437;
-}
-#login-button:hover {
-    background-color: #c23321;
-}
-label {
+#upload-status a {
+    color: #61dafb; /* A bright, techy link color */
     font-weight: bold;
+}
+
+/* --- Remove old styles that are no longer needed --- */
+/* The new Bootstrap structure makes these obsolete */
+#menu-toggle, #side-nav {
+    display: none !important;
 }

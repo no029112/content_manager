@@ -4,7 +4,7 @@ const DISCOVERY_DOCS = [
     "https://www.googleapis.com/discovery/v1/apis/youtube/v3/rest",
     "https://www.googleapis.com/discovery/v1/apis/sheets/v4/rest"
 ];
-const SCOPES = 'https://www.googleapis.com/auth/youtube.upload https://www.googleapis.com/auth/spreadsheets';
+const SCOPES = 'https://www.googleapis.com/auth/youtube.upload https://www.googleapis.com/auth/spreadsheets https://www.googleapis.com/auth/youtube.readonly';
 
 // --- Element References ---
 const authContainer = document.getElementById('auth-container');
@@ -81,6 +81,10 @@ function showLoginForm() {
 
 async function showUploadForm() {
     authContainer.style.display = 'none';
+    // Ensure other main content containers are hidden
+    if (document.getElementById('content-container')) {
+        document.getElementById('content-container').style.display = 'none';
+    }
 
     // Load form content if it's not already loaded
     if (uploadFormContainer.innerHTML.trim() === '') {
@@ -88,6 +92,8 @@ async function showUploadForm() {
             const response = await fetch('upload.html');
             if (!response.ok) throw new Error('Network response was not ok.');
             uploadFormContainer.innerHTML = await response.text();
+            // Now that the form is loaded, attach the submit handler
+            document.getElementById('upload-form').onsubmit = handleUpload;
         } catch (error) {
             console.error('Failed to fetch upload.html:', error);
             uploadFormContainer.innerHTML = '<p class="text-danger">Could not load upload form.</p>';

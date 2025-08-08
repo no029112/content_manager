@@ -2,16 +2,49 @@
 const SPREADSHEET_ID = '1co9ifi-djnarTEG1BDWJSf7EF_XE59n5rrwGypOeyMM'; // **Provided Spreadsheet ID**
 
 // --- Element References ---
-const uploadForm = document.getElementById('upload-form');
-const uploadStatus = document.getElementById('upload-status');
+// Note: uploadForm and uploadStatus are inside upload.html,
+// so they can only be referenced after upload.html is loaded.
 
 // --- Event Handlers ---
-uploadForm.onsubmit = handleUpload;
+// We need to wait for the menu to be loaded, so we use a MutationObserver
+document.addEventListener('DOMContentLoaded', () => {
+    const menuPlaceholder = document.getElementById('menu-placeholder');
+
+    const observer = new MutationObserver((mutationsList, observer) => {
+        for(const mutation of mutationsList) {
+            if (mutation.type === 'childList') {
+                const navUploadLink = document.getElementById('nav-upload-link');
+                if (navUploadLink) {
+                    navUploadLink.addEventListener('click', handleUploadLinkClick);
+                    observer.disconnect(); // Stop observing once the element is found
+                    break;
+                }
+            }
+        }
+    });
+
+    observer.observe(menuPlaceholder, { childList: true, subtree: true });
+});
+
+
+function handleUploadLinkClick(event) {
+    event.preventDefault();
+
+    // This function is defined in authen.js but we can call it from here
+    // It handles showing the upload form and hiding other content
+    showUploadForm();
+}
+
+// --- การอัปโหลด (โค้ดส่วนนี้เหมือนเดิมเกือบทั้งหมด) ---
+function handleUpload(event) {
 
 // --- การอัปโหลด (โค้ดส่วนนี้เหมือนเดิมเกือบทั้งหมด) ---
 function handleUpload(event) {
     event.preventDefault();
 
+    // Get elements at the time of submission, not on script load
+    const uploadForm = document.getElementById('upload-form');
+    const uploadStatus = document.getElementById('upload-status');
     const title = document.getElementById('title').value;
     const description = document.getElementById('description').value;
     const tags = document.getElementById('tags').value.split(',').map(tag => tag.trim());

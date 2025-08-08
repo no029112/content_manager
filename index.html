@@ -25,7 +25,6 @@
         </div>
     </nav>
 
-    <!-- Menu will be loaded here -->
     <div id="menu-placeholder"></div>
 
 
@@ -37,42 +36,7 @@
                 <!-- The login button is now dynamically added to the header -->
             </div>
 
-            <div id="upload-form-container" style="display:none;">
-                <h2 class="mb-4">อัปโหลดวิดีโอใหม่</h2>
-                <form id="upload-form">
-                    <div class="mb-3">
-                        <label for="title" class="form-label">ชื่อคลิป:</label>
-                        <input type="text" class="form-control" id="title" required>
-                    </div>
-
-                    <div class="mb-3">
-                        <label for="description" class="form-label">คำอธิบาย:</label>
-                        <textarea class="form-control" id="description" rows="5"></textarea>
-                    </div>
-
-                    <div class="mb-3">
-                        <label for="tags" class="form-label">Tags (คั่นด้วยเครื่องหมาย ,):</label>
-                        <input type="text" class="form-control" id="tags">
-                    </div>
-
-                    <div class="mb-3">
-                        <label for="program-name" class="form-label">ชื่อรายการ:</label>
-                        <select class="form-select" id="program-name" required>
-                            <option value="รู้ดีกว่า">รู้ดีกว่า</option>
-                            <option value="health ดีกว่า">health ดีกว่า</option>
-                            <option value="Shorts">Shorts</option>
-                        </select>
-                    </div>
-
-                    <div class="mb-3">
-                        <label for="video-file" class="form-label">เลือกไฟล์วิดีโอ:</label>
-                        <input type="file" class="form-control" id="video-file" accept="video/*" required>
-                    </div>
-
-                    <button type="submit" id="upload-button" class="btn btn-primary w-100">อัปโหลดไปยัง YouTube</button>
-                </form>
-                <div id="upload-status" class="mt-3"></div>
-            </div>
+            <div id="upload-form-container" style="display:none;"></div>
         </div>
     </main>
     <footer>

@@ -1,6 +1,6 @@
 // --- Constants ---
 const GEMINI_API_KEY_STORAGE_KEY = 'gemini_api_key';
-const GEMINI_API_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=';
+const GEMINI_API_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-pro:generateContent?key=';
 
 // --- DOMContentLoaded Listener ---
 document.addEventListener('DOMContentLoaded', () => {
@@ -35,6 +35,20 @@ async function handleChatClick(event) {
             const response = await fetch('chat.html');
             if (!response.ok) throw new Error('Network response was not ok.');
             chatContainer.innerHTML = await response.text();
+
+            // display chathistory if exists
+            const chatHistory = localStorage.getItem('chatHistory');
+            if (chatHistory) {
+                const chatBox = document.getElementById('chat-box');
+                const messages = JSON.parse(chatHistory);
+                messages.forEach(message => {
+                    const role = message.role === 'user' ? 'user' : 'ai';
+                    message.parts.forEach(part => {
+                        addMessageToChatBox(part.text, role);
+                    });
+                });
+            }
+
             attachChatListeners();
         } catch (error) {
             console.error('Failed to fetch chat.html:', error);
@@ -90,6 +104,8 @@ function saveGeminiApiKey() {
         apiKeyStatus.className = 'form-text text-success';
         console.log("Gemini API Key saved.");
         loadAndVerifyApiKey(); // Reload to enable chat
+        // clear chat history
+        localStorage.removeItem('chatHistory'); // Clear chat history when saving new key
     } else {
         apiKeyStatus.textContent = 'API Key cannot be empty.';
         apiKeyStatus.className = 'form-text text-danger';
@@ -112,32 +128,41 @@ async function handleSendMessage() {
     loadingIndicator.style.display = 'block';
 
     try {
-        // 1. Get context from YouTube
-        const videoContext = await getYouTubeVideoContext();
-
-        // 2. Get Gemini API Key
+       
+        // 1. Get Gemini API Key
         const geminiApiKey = localStorage.getItem(GEMINI_API_KEY_STORAGE_KEY);
         if (!geminiApiKey) {
             throw new Error("Gemini API Key is not set.");
         }
 
-        // 3. Construct the prompt
-        const prompt = `You are an expert YouTube channel consultant. Analyze the following list of video titles and descriptions from my channel to understand my content. Then, answer my question.
+        // 2. Construct the prompt
+        let chatHistory = localStorage.getItem('chatHistory');
+        if (!chatHistory) {
+            const videoContext = await getYouTubeVideoContext();
+            const prompt = `You are an expert YouTube channel consultant. Analyze the following list of video titles  from my channel to understand my content. Then, answer my question.
 
-        **My Videos:**
-        ${videoContext}
+            **My Videos:**
+            ${videoContext}
 
-        **My Question:**
-        ${message}`;
+            **My Question:**
+            ${message}`;
 
-        // 4. Call Gemini API
+            chatHistory = [ {  role : "user" , parts: [{ text: prompt }] }];
+        }
+        else {
+            chatHistory = JSON.parse(chatHistory);
+            chatHistory.push({ role : "user" , parts: [{ text:  message }] });
+            localStorage.setItem('chatHistory', JSON.stringify(chatHistory));
+        }
+
+        // 3. Call Gemini API
         const response = await fetch(GEMINI_API_URL + geminiApiKey, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                contents: [{ parts: [{ text: prompt }] }],
+                contents: chatHistory,
             }),
         });
 
@@ -148,6 +173,9 @@ async function handleSendMessage() {
 
         const data = await response.json();
         const aiResponse = data.candidates[0].content.parts[0].text;
+         // set chatHistory to localStorage
+        chatHistory.push({ role :"model"  , parts: [{ text: aiResponse }] });
+        localStorage.setItem('chatHistory', JSON.stringify(chatHistory));
 
         addMessageToChatBox(aiResponse, 'ai');
 
@@ -195,7 +223,7 @@ async function getYouTubeVideoContext() {
 
         // Format the context string
         return videoDetails.map(video => {
-            return `- Title: ${video.snippet.title}\n  Description: ${video.snippet.description.substring(0, 200)}...`;
+            return `- Title: ${video.snippet.title}\n  ...`;
         }).join('\n\n');
 
     } catch (error) {
@@ -240,13 +268,30 @@ async function getAllPlaylistItems(playlistId) {
 
 async function getVideoDetails(videoIds) {
     let allDetails = [];
-    for (let i = 0; i < videoIds.length; i += 50) {
-        const batch = videoIds.slice(i, i + 50);
-        const response = await gapi.client.youtube.videos.list({
-            part: 'snippet', // Only need snippet for title/description
-            id: batch.join(',')
-        });
-        allDetails = allDetails.concat(response.result.items);
+
+    // get alldetails from localStorage
+    const cachedDetails = localStorage.getItem('videoDetails');
+    if (cachedDetails) {
+        const cachedVideos = JSON.parse(cachedDetails);
+        // Filter out videos that are already cached
+        videoIds = videoIds.filter(id => !cachedVideos.some(video => video.id === id));
+        allDetails = cachedVideos;
     }
+    else{
+        // If no cached details, initialize allDetails as empty
+        allDetails = [];
+        for (let i = 0; i < videoIds.length; i += 50) {
+            const batch = videoIds.slice(i, i + 50);
+            const response = await gapi.client.youtube.videos.list({
+                part: 'snippet', // Only need snippet for title/description
+                id: batch.join(',')
+            });
+            allDetails = allDetails.concat(response.result.items);
+        }
+        // set to alldetails to localStorage
+        localStorage.setItem('videoDetails', JSON.stringify(allDetails));
+    }
+
+ 
     return allDetails;
 }

@@ -24,6 +24,7 @@ async function handleContentClick(event) {
 
     // Hide other containers and show the content container
     document.getElementById('upload-form-container').style.display = 'none';
+    document.getElementById('chat-container').style.display = 'none';
     const contentContainer = document.getElementById('content-container');
     contentContainer.style.display = 'block';
 
@@ -53,19 +54,31 @@ async function fetchAndDisplayVideos() {
 
     try {
         // 1. Get the user's channel uploads playlist ID
-        const uploadsPlaylistId = await getUploadsPlaylistId();
+        let uploadsPlaylistId = await getUploadsPlaylistId();
         if (!uploadsPlaylistId) {
             throw new Error("Could not find channel's uploads playlist.");
         }
 
         // 2. Get all video items from that playlist
-        const allVideos = await getAllPlaylistItems(uploadsPlaylistId);
-
+        let allVideos = await getAllPlaylistItems(uploadsPlaylistId);
+        console.log('before allVideos', allVideos);
         // 3. Get video details (including duration) for all videos
-        const videoDetails = await getVideoDetails(allVideos.map(v => v.snippet.resourceId.videoId));
+        ///let videoDetails = await getVideoDetails(allVideos.map(v => v.snippet.resourceId.videoId));
+        let videoIds = allVideos.map(v => v.snippet.resourceId.videoId);
+        const part = 'snippet,contentDetails';
+        let allDetails = [];
+        for (let i = 0; i < videoIds.length; i += 50) {
+            const batch = videoIds.slice(i, i + 50);
+            const response = await gapi.client.youtube.videos.list({
+                part: part,
+                id: batch.join(',')
+            });
+            allDetails = allDetails.concat(response.result.items);
+        }
+
 
         // 4. Categorize and render videos
-        categorizeAndRenderVideos(videoDetails);
+        categorizeAndRenderVideos(allDetails);
 
     } catch (error) {
         console.error('Error fetching YouTube videos:', error);
@@ -94,7 +107,7 @@ async function getAllPlaylistItems(playlistId) {
 
     do {
         const response = await gapi.client.youtube.playlistItems.list({
-            part: 'snippet',
+            part: 'snippet,contentDetails',
             playlistId: playlistId,
             maxResults: 50, // Max allowed per page
             pageToken: nextPageToken
@@ -110,12 +123,15 @@ async function getAllPlaylistItems(playlistId) {
 }
 
 async function getVideoDetails(videoIds) {
+    console.log(videoIds)
     let allDetails = [];
     // The API allows fetching details for up to 50 videos at a time
+    const part = 'snippet,contentDetails';
+    console.log(part)
     for (let i = 0; i < videoIds.length; i += 50) {
         const batch = videoIds.slice(i, i + 50);
         const response = await gapi.client.youtube.videos.list({
-            part: 'snippet,contentDetails',
+            part: part,
             id: batch.join(',')
         });
         allDetails = allDetails.concat(response.result.items);

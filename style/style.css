@@ -6,13 +6,13 @@
 /* Default: Dark Theme */
 :root {
     --primary-color: #fefefe; /* Main accent color (Bootstrap blue) */
-    --background-color: #1a1a1a;
+    --background-color: #0a1b39;
     --text-color: #e8e6e3;
-    --card-background: #2c2c2c;
+    --card-background: #070932;
     --input-background: #3a3a3a;
     --input-focus-background: #4a4a4a;
     --border-color: rgba(255, 255, 255, 0.15);
-    --navbar-background: #212529;
+    --navbar-background: #0a1b39;
     --link-color-hover: #61dafb;
     --btn-submit-background: #e64444; /* Button background color */
 }
@@ -43,7 +43,6 @@ body.light-theme {
     border: 1px solid var(--border-color);
     border-radius: 0.5rem;
     padding: 1.2rem;
-   
     transition: background-color 0.3s, color 0.3s, border-color 0.3s;
 }
 
@@ -61,6 +60,7 @@ body {
     background-color: var(--navbar-background) !important;
     border-bottom: 1px solid var(--primary-color) !important;
     transition: background-color 0.3s;
+    background-blend-mode: normal;
 }
 
 .navbar-brand, .nav-link, .offcanvas-title {

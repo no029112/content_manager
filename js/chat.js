@@ -27,6 +27,7 @@ async function handleChatClick(event) {
 
     document.getElementById('upload-form-container').style.display = 'none';
     document.getElementById('content-container').style.display = 'none';
+    document.getElementById('home-container').style.display = 'none';
     const chatContainer = document.getElementById('chat-container');
     chatContainer.style.display = 'block';
 

@@ -25,6 +25,7 @@ async function handleContentClick(event) {
     // Hide other containers and show the content container
     document.getElementById('upload-form-container').style.display = 'none';
     document.getElementById('chat-container').style.display = 'none';
+    document.getElementById('home-container').style.display = 'none';
     const contentContainer = document.getElementById('content-container');
     contentContainer.style.display = 'block';
 

@@ -57,22 +57,31 @@ function restoreSession() {
 
         if (tokenAgeDays < 10) {
             gapi.client.setToken(tokenData.token);
-            showUploadForm();
+            // User is logged in, show stats and correct buttons
+            if (typeof displayChannelStats === 'function') {
+                displayChannelStats();
+            }
+            // Update UI to show logout button
+            authStatus.innerHTML = '';
+            authStatus.appendChild(logoutButton);
+            logoutButton.style.display = 'inline-block';
+            loginButton.style.display = 'none';
+
         } else {
-            // Token is expired, clear it
+            // Token is expired, clear it and show login button
             localStorage.removeItem('youtube_token');
+            showLoginForm();
         }
     } else {
+        // User is not logged in
         showLoginForm();
     }
 }
 
 // --- UI Update Functions ---
 function showLoginForm() {
-    authContainer.style.display = 'block';
-    uploadFormContainer.style.display = 'none';
-
-    // Move login button to header
+    // This function now just manages the login/logout buttons in the header
+    // The main content is the home page, which is shown by default.
     authStatus.innerHTML = ''; // Clear previous state
     authStatus.appendChild(loginButton);
     loginButton.style.display = 'inline-block';
@@ -80,10 +89,13 @@ function showLoginForm() {
 }
 
 async function showUploadForm() {
-    authContainer.style.display = 'none';
-    // Ensure other main content containers are hidden
+    // Hide home and other containers
+    document.getElementById('home-container').style.display = 'none';
     if (document.getElementById('content-container')) {
         document.getElementById('content-container').style.display = 'none';
+    }
+     if (document.getElementById('chat-container')) {
+        document.getElementById('chat-container').style.display = 'none';
     }
 
     // Load form content if it's not already loaded
@@ -142,7 +154,14 @@ function handleAuthClick() {
         localStorage.setItem('youtube_token', JSON.stringify(tokenData));
 
         // UI changes
-        showUploadForm();
+        authStatus.innerHTML = '';
+        authStatus.appendChild(logoutButton);
+        logoutButton.style.display = 'inline-block';
+        loginButton.style.display = 'none';
+
+        if (typeof displayChannelStats === 'function') {
+            displayChannelStats();
+        }
     };
 
     if (gapi.client.getToken() === null) {
